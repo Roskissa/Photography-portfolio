@@ -1,221 +1,316 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./Work.css";
 
-type Stage = {
-  id: string;
-  date: string;
+type CategoryId = "ilmakuvat" | "dem" | "ortokuvat" | "mallit3d";
+
+type WorkCategory = {
+  id: CategoryId;
   title: string;
-  summary: string;
-  orthophoto: string;
-  generalPhotos: string[];
-  modelPreview?: string;
+  description: string;
 };
 
-const stages: Stage[] = [
+type WorkImageItem = {
+  src: string;
+  date: string;
+  category: CategoryId;
+  filename: string;
+};
+
+const categories: WorkCategory[] = [
   {
-    id: "stage-1",
-    date: "12 Apr 2026",
-    title: "Site preparation",
-    summary:
-      "Initial documentation phase. Ground conditions, access routes, material storage areas and early site layout are clearly visible.",
-    orthophoto: "/work/ortho_1.webp",
-    generalPhotos: [
-      "/work/general_1.webp",
-      "/work/general_2.webp",
-      "/work/general_3.webp",
-    ],
-    modelPreview: "/work/model_preview_1.webp",
+    id: "ilmakuvat",
+    title: "Ilmakuvat",
+    description: "Yleiskuvat työmaasta ja sen etenemisestä.",
   },
   {
-    id: "stage-2",
-    date: "03 May 2026",
-    title: "Groundworks",
-    summary:
-      "Earthworks and early structural preparation. Orthophoto gives a clean overall view, while oblique images show depth and working conditions.",
-    orthophoto: "/work/ortho_2.webp",
-    generalPhotos: [
-      "/work/general_4.webp",
-      "/work/general_5.webp",
-      "/work/general_6.webp",
-    ],
-    modelPreview: "/work/model_preview_2.webp",
+    id: "dem",
+    title: "Syvyyskartan peittokuvat",
+    description: "Korkeuserojen ja pinnanmuotojen havainnollistaminen.",
   },
   {
-    id: "stage-3",
-    date: "24 May 2026",
-    title: "Structural progress",
-    summary:
-      "Major visual changes become easy to compare over time. Repeated capture positions help make progress understandable at a glance.",
-    orthophoto: "/work/ortho_3.webp",
-    generalPhotos: [
-      "/work/general_7.webp",
-      "/work/general_8.webp",
-      "/work/general_9.webp",
-    ],
-    modelPreview: "/work/model_preview_3.webp",
+    id: "ortokuvat",
+    title: "Ortokuvat",
+    description:
+      "Tarkka sateelliittityylinen kuvamosaiikki kuvatusta alueesta.",
   },
   {
-    id: "stage-4",
-    date: "14 Jun 2026",
-    title: "Later-stage development",
-    summary:
-      "This stage highlights how timeline-based drone documentation makes change tracking much easier for both internal review and external communication.",
-    orthophoto: "/work/ortho_4.webp",
-    generalPhotos: [
-      "/work/general_10.webp",
-      "/work/general_11.webp",
-      "/work/general_12.webp",
-    ],
-    modelPreview: "/work/model_preview_4.webp",
+    id: "mallit3d",
+    title: "3D mallit",
+    description: "Rakenteen ja ympäristön hahmottaminen kolmiulotteisesti.",
   },
 ];
 
-export default function WorkDocumentationSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+// Reads a date like 22.3.2026 from a file path or file name
+function extractDateFromPath(path: string): string | null {
+  const match = path.match(/(\d{1,2}\.\d{1,2}\.\d{4})/);
+  return match ? match[1] : null;
+}
 
-  const activeStage = useMemo(() => stages[activeIndex], [activeIndex]);
+// Converts dd.mm.yyyy into a numeric timestamp for sorting
+function dateStringToTime(dateString: string): number {
+  const [day, month, year] = dateString.split(".").map(Number);
+  return new Date(year, month - 1, day).getTime();
+}
 
-  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+function formatTimelineDate(dateString: string): string {
+  return dateString;
+}
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+// Import all images from each category folder.
+// These folders should be under src/assets/work/...
+const ilmakuvatModules = import.meta.glob(
+  "./assets/work/ilmakuvat/*.{png,jpg,jpeg,webp,avif}",
+  {
+    eager: true,
+    import: "default",
+  },
+) as Record<string, string>;
 
-    const rotateY = ((x - centerX) / centerX) * 6;
-    const rotateX = ((centerY - y) / centerY) * 6;
+const demModules = import.meta.glob(
+  "./assets/work/dem/*.{png,jpg,jpeg,webp,avif}",
+  {
+    eager: true,
+    import: "default",
+  },
+) as Record<string, string>;
 
-    setTilt({ rotateX, rotateY });
-  }
+const ortokuvatModules = import.meta.glob(
+  "./assets/work/ortokuvat/*.{png,jpg,jpeg,webp,avif}",
+  {
+    eager: true,
+    import: "default",
+  },
+) as Record<string, string>;
 
-  function handleMouseLeave() {
-    setTilt({ rotateX: 0, rotateY: 0 });
-  }
+const mallit3dModules = import.meta.glob(
+  "./assets/work/3d mallit/*.{png,jpg,jpeg,webp,avif}",
+  {
+    eager: true,
+    import: "default",
+  },
+) as Record<string, string>;
+
+function buildImageList(
+  modules: Record<string, string>,
+  category: CategoryId,
+): WorkImageItem[] {
+  return Object.entries(modules)
+    .map(([path, src]) => {
+      const date = extractDateFromPath(path);
+
+      if (!date) {
+        return null;
+      }
+
+      const filename = path.split("/").pop() ?? path;
+
+      return {
+        src,
+        date,
+        category,
+        filename,
+      };
+    })
+    .filter((item): item is WorkImageItem => item !== null);
+}
+
+export default function Work() {
+  const allImages = useMemo(() => {
+    return [
+      ...buildImageList(ilmakuvatModules, "ilmakuvat"),
+      ...buildImageList(demModules, "dem"),
+      ...buildImageList(ortokuvatModules, "ortokuvat"),
+      ...buildImageList(mallit3dModules, "mallit3d"),
+    ];
+  }, []);
+
+  const dates = useMemo(() => {
+    const uniqueDates = Array.from(new Set(allImages.map((item) => item.date)));
+    return uniqueDates.sort(
+      (a, b) => dateStringToTime(a) - dateStringToTime(b),
+    );
+  }, [allImages]);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const currentDate = dates[currentIndex] ?? "";
+
+  // Keeps page valid even if there are no images yet
+  useEffect(() => {
+    if (dates.length > 0 && currentIndex > dates.length - 1) {
+      setCurrentIndex(dates.length - 1);
+    }
+  }, [dates, currentIndex]);
+
+  const currentImagesByCategory = useMemo(() => {
+    const map = new Map<CategoryId, WorkImageItem>();
+
+    for (const image of allImages) {
+      if (image.date === currentDate) {
+        map.set(image.category, image);
+      }
+    }
+
+    return map;
+  }, [allImages, currentDate]);
 
   return (
-    <section className="work-doc-section" id="work-documentation">
-      <div className="work-doc-shell">
-        <div className="work-doc-header">
-          <span className="work-doc-eyebrow">
-            Work-oriented drone documentation
-          </span>
-          <h2>Progress tracking that stays readable over time</h2>
-          <p>
-            Orthophotos provide the clearest project-wide timeline, while
-            general drone photographs add context, scale and detail. This layout
-            is built to make change easy to understand instead of just showing
-            individual images.
-          </p>
+    <main className="site-shell work-page" id="top">
+      <div className="background-glow background-glow-1" />
+      <div className="background-glow background-glow-2" />
+
+      {/* Same topbar structure as main page */}
+      <header className="topbar">
+        <div className="container topbar-inner">
+          <a href="/#top" className="brand work-brand-link">
+            IVAN SYNENKO
+          </a>
+
+          <nav className="nav">
+            <a href="/#portfolio-photo">Valokuvaus</a>
+            <a href="/#portfolio-aerial">Ilmakuvaus</a>
+            <a href="/#seuranta">Projektiseuranta</a>
+            <a href="/#contact">Ota yhteyttä</a>
+          </nav>
         </div>
+      </header>
 
-        <div className="work-doc-layout">
-          <div
-            className="work-stack-panel"
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div
-              className="work-stack-scene"
-              style={{
-                transform: `perspective(1200px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
-              }}
-            >
-              {stages.map((stage, index) => {
-                const offsetFromTop = stages.length - 1 - index;
-                const isActive = index === activeIndex;
+      <section className="work-hero">
+        <div className="container work-hero-grid">
+          <div className="work-copy">
+            <p className="work-eyebrow">Projektiseuranta</p>
 
-                return (
-                  <button
-                    key={stage.id}
-                    type="button"
-                    className={`work-stack-layer ${isActive ? "is-active" : ""}`}
-                    style={{
-                      transform: `translateY(${offsetFromTop * 28}px) scale(${1 - offsetFromTop * 0.03})`,
-                      zIndex: 100 - offsetFromTop,
-                      backgroundImage: `linear-gradient(
-                        to bottom,
-                        rgba(10, 14, 20, 0.18),
-                        rgba(10, 14, 20, 0.42)
-                      ), url(${stage.orthophoto})`,
-                    }}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    onFocus={() => setActiveIndex(index)}
-                    aria-label={`Show documentation stage from ${stage.date}`}
-                  >
-                    <span className="work-stack-layer-label">
-                      <span>{stage.date}</span>
-                      <strong>{stage.title}</strong>
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            <h1 className="work-title">Esimerkkiprojekti</h1>
 
-            <div className="work-stack-hint">
-              Hover the layers to move through the timeline
-            </div>
+            <p className="work-lead">
+              Projektien seuranta kätevällä selainpohjaisella työkalulla. Pystyt
+              tarkastelemaan kaikkia käynnissä olevia projektejasi mistä tahansa
+              laitteesta.
+            </p>
+
+            <p className="work-lead work-lead-secondary">
+              Kaikki aineistot ovat koottu helposti luettaviksi ja
+              tarkastettaviksi eri päivämäärien välillä.
+            </p>
+
+            <button type="button" className="work-cta">
+              Tutustu työkaluun tästä
+            </button>
           </div>
 
-          <div className="work-detail-panel">
-            <div className="work-preview-card">
-              <div className="work-preview-image-wrap">
-                <img
-                  src={activeStage.orthophoto}
-                  alt={`${activeStage.title} orthophoto from ${activeStage.date}`}
-                  className="work-preview-image"
-                />
-                <div className="work-preview-overlay">
-                  <span>{activeStage.date}</span>
-                  <h3>{activeStage.title}</h3>
-                </div>
-              </div>
-
-              <div className="work-preview-text">
-                <p>{activeStage.summary}</p>
-              </div>
+          <div className="work-timeline-card">
+            <div className="work-timeline-header">
+              <span className="work-timeline-label">Aikajana</span>
+              <span className="work-timeline-date">
+                {currentDate || "Ei kuvia"}
+              </span>
             </div>
 
-            <div className="work-support-grid">
-              <div className="work-support-card">
-                <div className="work-support-head">
-                  <h4>Supporting photographs</h4>
-                  <span>Same stage</span>
+            {dates.length > 0 ? (
+              <>
+                <div className="work-slider-wrap">
+                  <div className="work-slider-track">
+                    <div
+                      className="work-slider-progress"
+                      style={{
+                        width:
+                          dates.length > 1
+                            ? `${(currentIndex / (dates.length - 1)) * 100}%`
+                            : "0%",
+                      }}
+                    />
+                  </div>
+
+                  <input
+                    className="work-range"
+                    type="range"
+                    min={0}
+                    max={Math.max(dates.length - 1, 0)}
+                    step={1}
+                    value={currentIndex}
+                    onChange={(event) =>
+                      setCurrentIndex(Number(event.target.value))
+                    }
+                    aria-label="Valitse päivämäärä"
+                  />
+
+                  <div className="work-slider-dots" aria-hidden="true">
+                    {dates.map((date, index) => (
+                      <button
+                        key={date}
+                        type="button"
+                        className={`work-slider-dot ${
+                          index === currentIndex ? "is-active" : ""
+                        }`}
+                        style={{
+                          left:
+                            dates.length > 1
+                              ? `${5 + (index / (dates.length - 1)) * 90}%`
+                              : "5%",
+                        }}
+                        onClick={() => setCurrentIndex(index)}
+                      />
+                    ))}
+                  </div>
                 </div>
 
-                <div className="work-photo-grid">
-                  {activeStage.generalPhotos.map((photo, index) => (
-                    <div key={photo} className="work-photo-tile">
-                      <img
-                        src={photo}
-                        alt={`${activeStage.title} supporting drone photo ${index + 1}`}
-                      />
-                    </div>
+                <div className="work-date-list">
+                  {dates.map((date, index) => (
+                    <button
+                      key={date}
+                      type="button"
+                      className={`work-date-item ${
+                        index === currentIndex ? "is-active" : ""
+                      }`}
+                      onClick={() => setCurrentIndex(index)}
+                    >
+                      {formatTimelineDate(date)}
+                    </button>
                   ))}
                 </div>
+              </>
+            ) : (
+              <div className="work-empty-state">
+                Lisää kuvat kansioihin, niin aikajana rakentuu automaattisesti
+                tiedostonimien päivämääristä.
               </div>
-
-              {activeStage.modelPreview && (
-                <div className="work-support-card">
-                  <div className="work-support-head">
-                    <h4>Photogrammetry model preview</h4>
-                    <span>Optional supporting output</span>
-                  </div>
-
-                  <div className="work-model-preview">
-                    <img
-                      src={activeStage.modelPreview}
-                      alt={`${activeStage.title} photogrammetry model preview`}
-                    />
-                    <div className="work-model-badge">3D model available</div>
-                  </div>
-                </div>
-              )}
-            </div>
+            )}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section className="work-gallery-section">
+        <div className="container">
+          <div className="work-gallery-grid">
+            {categories.map((category) => {
+              const image = currentImagesByCategory.get(category.id);
+
+              return (
+                <article className="work-card" key={category.id}>
+                  <div className="work-card-media">
+                    {image ? (
+                      <img
+                        key={`${category.id}-${currentDate}`}
+                        src={image.src}
+                        alt={`${category.title} ${currentDate}`}
+                        className="work-card-image"
+                      />
+                    ) : (
+                      <div className="work-card-placeholder">
+                        <span>Ei kuvaa tälle päivälle</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="work-card-body">
+                    <h2 className="work-card-title">{category.title}</h2>
+                    <p className="work-card-text">{category.description}</p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

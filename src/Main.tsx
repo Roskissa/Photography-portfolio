@@ -52,7 +52,7 @@ function Main() {
           <nav className="nav">
             <a href="#portfolio-photo">Valokuvaus</a>
             <a href="#portfolio-aerial">Ilmakuvaus</a>
-            <a href="#seuranta">Projektisuranta</a>
+            <a href="#seuranta">Projektiseuranta</a>
             <a href="#contact">Ota yhteyttä</a>
           </nav>
         </div>
@@ -205,40 +205,80 @@ function Main() {
       <section id="seuranta" className="section">
         <div className="container">
           <div className="section-heading reveal-up">
-            <p className="eyebrow">Palvelut</p>
-            <h2>Seuranta</h2>
+            <p className="eyebrow">Portfolio</p>
+            <h2>Projektiseuranta</h2>
+            <h2 className="tracking-preview-subtitle"></h2>
+            <h2 className="tracking-preview-subtitle">Esimerkkikohde</h2>
           </div>
+        </div>
 
-          <div className="services-grid">
-            <div className="service-card reveal-up stagger-1">
-              <h3>Valokuvaus</h3>
-              <p>
-                Dokumentaarinen tilannekuvaus rennoin ja lämpimällä tunnelmalla
-                editoidut valokuvat.
-              </p>
-            </div>
+        <div className="container">
+          <Link
+            to="/work"
+            className="tracking-card-link"
+            aria-label="Avaa projektiseurannan työ-sivu"
+          >
+            <article className="tracking-card">
+              <div className="tracking-card-imageWrap">
+                <img
+                  src="/ilmakuvat/skeittipuisto.webp"
+                  alt="Skeittipuiston ilmakuva"
+                  className="tracking-card-image"
+                />
+              </div>
 
-            <div className="services-subheader">
-              <h3 className="services-subtitle">Työ</h3>
+              <div className="tracking-card-content">
+                <div className="tracking-card-top">
+                  <div>
+                    <p className="tracking-card-label">Kohde</p>
+                    <h3 className="tracking-card-name">Skeittipuisto</h3>
+                    <p className="tracking-card-location">
+                      Luhtaniityntie 6, Kerava
+                    </p>
+                  </div>
 
-              <Link to="/work" className="services-button">
-                Avaa →
-              </Link>
-            </div>
+                  <span className="tracking-card-open">
+                    Avaa projekti <span aria-hidden="true">→</span>
+                  </span>
+                </div>
 
-            <div className="service-card reveal-up stagger-2">
-              <h3>Ilmakuvaukset</h3>
-              <p>Ilmakuvat, videot, ortokuvaprosessointi ja fotogrammetria.</p>
-            </div>
+                <div className="tracking-card-pills">
+                  <span className="tracking-card-pill">
+                    Viimeisin päivitys: 10.4.2026
+                  </span>
+                  <span className="tracking-card-pill">
+                    Seuraava lento: 17.4.2026
+                  </span>
+                  <span className="tracking-card-pill">
+                    Arvioitu valmistuminen: Kesäkuu 2026
+                  </span>
+                </div>
 
-            <div className="service-card reveal-up stagger-3">
-              <h3>Projektiseuranta</h3>
-              <p>
-                Työmaan dokumentointi ja edistymisen seuranta säännöllisillä
-                kuvauskerroilla ja kätevällä seurantatyökalulla.
-              </p>
-            </div>
-          </div>
+                <p className="tracking-card-description">
+                  Salaoja-, sadevesi- ja viemäritöiden asennukset jatkuvat.
+                  Styroksielementtejä odotetaan paikalle betonivalua varten.
+                  Kohteen etenemistä seurataan viikoittaisilla ilmakuvilla,
+                  vidoilla, ortokuvilla ja 3D-malleilla.
+                </p>
+
+                <div className="tracking-card-footer">
+                  <div className="tracking-card-progressBlock">
+                    <div className="tracking-card-progressHeader">
+                      <span>Projektin eteneminen</span>
+                      <strong>8%</strong>
+                    </div>
+
+                    <div className="tracking-card-progressTrack">
+                      <div
+                        className="tracking-card-progressFill"
+                        style={{ width: "8%" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </Link>
         </div>
       </section>
 

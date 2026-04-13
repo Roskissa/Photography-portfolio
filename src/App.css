@@ -762,3 +762,233 @@ img {
     width: min(78vw, 240px);
   }
 }
+
+/* =========================
+   Projektiseuranta
+========================= */
+
+.tracking-preview-section {
+  padding: 7rem 0 8rem;
+}
+
+.tracking-preview-header {
+  margin-bottom: 2rem;
+}
+
+.tracking-preview-eyebrow {
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 245, 235, 0.62);
+}
+
+.tracking-preview-title {
+  margin: 0rem 0 0;
+  font-size: clamp(2.6rem, 6vw, 5.4rem);
+  line-height: 0.7;
+  font-weight: 600;
+  color: #f6f1eb;
+}
+
+.tracking-preview-subtitle {
+  margin: 0rem 0 0;
+  font-size: 1.05rem;
+  color: rgba(223, 225, 225, 0.429);
+}
+
+.tracking-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.tracking-card {
+  display: grid;
+  grid-template-columns: minmax(280px, 440px) 1fr;
+  overflow: hidden;
+  border-radius: 28px;
+  background: rgba(255, 248, 242, 0.92);
+  border: 1px solid rgba(94, 46, 18, 0.708);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+  backdrop-filter: blur(10px);
+}
+
+.tracking-card-link:hover .tracking-card,
+.tracking-card-link:focus-visible .tracking-card {
+  transform: translateY(-4px);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.tracking-card-link:focus-visible {
+  outline: none;
+}
+
+.tracking-card-imageWrap {
+  position: relative;
+  min-height: 320px;
+  background: #161616;
+}
+
+.tracking-card-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.tracking-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  padding: 2rem 2rem 1.8rem;
+  color: #171717;
+}
+
+.tracking-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.tracking-card-label {
+  margin: 0 0 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(23, 23, 23, 0.48);
+}
+
+.tracking-card-name {
+  margin: 0;
+  font-size: clamp(1.9rem, 2.5vw, 3rem);
+  line-height: 1;
+  font-weight: 800;
+}
+
+.tracking-card-location {
+  margin: 0.55rem 0 0;
+  font-size: 1rem;
+  color: rgba(23, 23, 23, 0.68);
+}
+
+.tracking-card-open {
+  flex-shrink: 0;
+  padding-top: 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(23, 23, 23, 0.7);
+}
+
+.tracking-card-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tracking-card-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: rgba(224, 102, 2, 0.06);
+  border: 1px solid rgba(20, 20, 20, 0.06);
+  font-size: 0.95rem;
+  color: rgba(23, 23, 23, 0.82);
+}
+
+.tracking-card-description {
+  margin: 0;
+  max-width: 70ch;
+  font-size: clamp(1.05rem, 1.2vw, 1.2rem);
+  line-height: 1.6;
+  color: rgba(23, 23, 23, 0.86);
+}
+
+.tracking-card-footer {
+  margin-top: auto;
+}
+
+.tracking-card-progressBlock {
+  padding-top: 0.25rem;
+}
+
+.tracking-card-progressHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.7rem;
+  font-size: 0.96rem;
+  color: rgba(23, 23, 23, 0.76);
+}
+
+.tracking-card-progressHeader strong {
+  font-size: 1rem;
+  color: #171717;
+}
+
+.tracking-card-progressTrack {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(20, 20, 20, 0.08);
+  overflow: hidden;
+}
+
+.tracking-card-progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff9114 0%, #ffc109 100%);
+}
+
+@media (max-width: 980px) {
+  .tracking-card {
+    grid-template-columns: 1fr;
+  }
+
+  .tracking-card-imageWrap {
+    min-height: 260px;
+  }
+
+  .tracking-card-top {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .tracking-card-open {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .tracking-preview-section {
+    padding: 5.5rem 0 6.5rem;
+  }
+
+  .tracking-card-content {
+    padding: 1.3rem;
+    gap: 1.1rem;
+  }
+
+  .tracking-card-pill {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .tracking-card-description {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+}
