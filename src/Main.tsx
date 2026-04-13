@@ -1,38 +1,29 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./App.css";
 
-type PortfolioImage = {
+type Pf_valokuva = {
   src: string;
-  title: string;
 };
 
-const portfolioImages: PortfolioImage[] = [
-  { src: "/images/Portfolio_1.webp", title: "Portfolio 1" },
-  { src: "/images/Portfolio_2.webp", title: "Portfolio 2" },
-  { src: "/images/Portfolio_3.webp", title: "Portfolio 3" },
-  { src: "/images/Portfolio_4.webp", title: "Portfolio 4" },
-  { src: "/images/Portfolio_5.webp", title: "Portfolio 5" },
-  { src: "/images/Portfolio_6.webp", title: "Portfolio 6" },
-  { src: "/images/Portfolio_7.webp", title: "Portfolio 7" },
-  { src: "/images/Portfolio_8.webp", title: "Portfolio 8" },
-  { src: "/images/Portfolio_9.webp", title: "Portfolio 9" },
-  { src: "/images/Portfolio_10.webp", title: "Portfolio 10" },
-  { src: "/images/Portfolio_11.webp", title: "Portfolio 11" },
-  { src: "/images/Portfolio_12.webp", title: "Portfolio 12" },
-  { src: "/images/Portfolio_13.webp", title: "Portfolio 13" },
-  { src: "/images/Portfolio_14.webp", title: "Portfolio 14" },
-  { src: "/images/Portfolio_15.webp", title: "Portfolio 15" },
-  { src: "/images/Portfolio_16.webp", title: "Portfolio 16" },
-  { src: "/images/Portfolio_17.webp", title: "Portfolio 17" },
-];
+type Pf_ilmakuva = {
+  src: string;
+};
+
+const pf_valokuvat: Pf_valokuva[] = Array.from({ length: 17 }, (_, i) => ({
+  src: `/valokuvat/pf_valokuva_${i + 1}.webp`,
+}));
+
+const pf_ilmakuvat: Pf_ilmakuva[] = Array.from({ length: 82 }, (_, i) => ({
+  src: `/ilmakuvat/pf_ilmakuva_${i + 1}.webp`,
+}));
 
 function Main() {
-  const featuredImages = portfolioImages.slice(0, 3);
-  const heroBackgroundImages = portfolioImages.slice(0, 5);
+  const heroBackgroundImages = pf_valokuvat.slice(0, 5);
 
-  const [selectedImage, setSelectedImage] = useState<PortfolioImage | null>(
-    null,
-  );
+  const [selectedImage, setSelectedImage] = useState<
+    Pf_valokuva | Pf_ilmakuva | null
+  >(null);
   const [isClosing, setIsClosing] = useState(false);
 
   function closeModal() {
@@ -54,9 +45,9 @@ function Main() {
           <div className="brand">IVAN SYNENKO</div>
 
           <nav className="nav">
-            <a href="#portfolio">Portfolio</a>
+            <a href="#portfolio-photo">Portfolio</a>
             <a href="#services">Työ</a>
-            <a href="#contact">Ota Yhteyttä</a>
+            <a href="#contact">Ota yhteyttä</a>
           </nav>
         </div>
       </header>
@@ -81,45 +72,45 @@ function Main() {
             <h1>IVAN SYNENKO</h1>
 
             <p className="eyebrow">
-              Valokuvaus · Ilmakuvas · Projektin seuranta
+              Valokuvaus · Ilmakuvaus · Projektiseuranta
             </p>
           </div>
 
-          <div className="hero-visual hero-visual-enhanced reveal-up reveal-delay-1">
-            <div className="hero-main-card hero-main-card-enhanced">
-              <img
-                src={featuredImages[0].src}
-                alt={featuredImages[0].title}
-                className="hero-main-image"
-              />
-            </div>
-
-            <div className="hero-floating-card hero-floating-card-1">
-              <img src={featuredImages[1].src} alt={featuredImages[1].title} />
-            </div>
-
-            <div className="hero-floating-card hero-floating-card-2">
-              <img src={featuredImages[2].src} alt={featuredImages[2].title} />
-            </div>
+          <div className="hero-floating-images">
+            <img
+              src="/images/Portfolio_1.webp"
+              alt=""
+              className="hero-float-img hero-float-img-1"
+            />
+            <img
+              src="/images/Portfolio_2.webp"
+              alt=""
+              className="hero-float-img hero-float-img-2"
+            />
+            <img
+              src="/images/Portfolio_3.webp"
+              alt=""
+              className="hero-float-img hero-float-img-3"
+            />
           </div>
         </div>
       </section>
 
       <section className="section section-intro" />
 
-      <section id="portfolio" className="section portfolio-section">
+      <section id="portfolio-photo" className="section portfolio-section">
         <div className="portfolio-heading-wrap">
           <div className="container">
             <div className="section-heading reveal-up">
               <p className="eyebrow">Portfolio</p>
-              <h2>Valitut palat</h2>
+              <h2>Valokuvaus</h2>
             </div>
           </div>
         </div>
 
         <div className="portfolio-container-full">
           <div className="editorial-gallery reveal-up reveal-delay-1">
-            {portfolioImages.map((image) => (
+            {pf_valokuvat.map((image) => (
               <article
                 key={image.src}
                 className="gallery-card"
@@ -127,7 +118,7 @@ function Main() {
               >
                 <img
                   src={image.src}
-                  alt={image.title}
+                  alt="Valokuva"
                   className="gallery-image"
                   loading="lazy"
                 />
@@ -156,18 +147,48 @@ function Main() {
 
             <img
               src={selectedImage.src}
-              alt={selectedImage.title}
+              alt="Avattu kuva"
               className="image-modal-img"
             />
           </div>
         </div>
       )}
 
+      <section id="portfolio-aerial" className="section portfolio-section">
+        <div className="portfolio-heading-wrap">
+          <div className="container">
+            <div className="section-heading reveal-up">
+              <p className="eyebrow">Portfolio</p>
+              <h2>Ilmakuvaus</h2>
+            </div>
+          </div>
+        </div>
+
+        <div className="portfolio-container-full">
+          <div className="editorial-gallery reveal-up reveal-delay-1">
+            {pf_ilmakuvat.map((image) => (
+              <article
+                key={image.src}
+                className="gallery-card"
+                onClick={() => setSelectedImage(image)}
+              >
+                <img
+                  src={image.src}
+                  alt="Ilmakuva"
+                  className="gallery-image"
+                  loading="lazy"
+                />
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="services" className="section">
         <div className="container">
           <div className="section-heading reveal-up">
-            <p className="eyebrow">Työ</p>
-            <h2>Projektin seuranta</h2>
+            <p className="eyebrow">Palvelut</p>
+            <h2>Työ</h2>
           </div>
 
           <div className="services-grid">
@@ -179,9 +200,17 @@ function Main() {
               </p>
             </div>
 
+            <div className="services-subheader">
+              <h3 className="services-subtitle">Työ</h3>
+
+              <Link to="/work" className="services-button">
+                Avaa →
+              </Link>
+            </div>
+
             <div className="service-card reveal-up stagger-2">
-              <h3>Ilmakuvaus</h3>
-              <p>Ilmakuvaut, videot, ortokuvaprosessointi ja fotogrammetria.</p>
+              <h3>Ilmakuvaukset</h3>
+              <p>Ilmakuvat, videot, ortokuvaprosessointi ja fotogrammetria.</p>
             </div>
 
             <div className="service-card reveal-up stagger-3">
@@ -199,7 +228,7 @@ function Main() {
         <div className="container">
           <div className="contact-panel reveal-up">
             <div>
-              <p className="eyebrow">Kiinostuitko?</p>
+              <p className="eyebrow">Kiinnostuitko?</p>
               <h2>Ota yhteyttä</h2>
               <p className="contact-text">
                 Vastaan kaikkina vuodenaikoina tiedusteluihin, tarjouspyyntöihin

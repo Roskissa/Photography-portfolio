@@ -1,73 +1,80 @@
-# React + TypeScript + Vite
+Run local
+pnpm run dev
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Webp conversion
+magick mogrify -path web -resize 2560x -format webp -quality 50 \*.jpg
 
-Currently, two official plugins are available:
+First Time Setup
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Initialize Project
+git init
 
-## React Compiler
+Connect to GitHub later:
+git remote add origin <your-repo-url>
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Daily Workflow
 
-## Expanding the ESLint configuration
+1. Check changes
+   git status
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2. Add files
+   git add .
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+3. Commit
+   git commit -m "Your message"
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+4. Push
+   git push origin main
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Inspect Changes
+git diff # Unstaged changes
+git diff --staged # Staged changes
+git log # Commit history
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Branching
+Create and switch:
+git checkout -b feature/my-feature
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Switch branch:
+git checkout main
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Merge into main:
+git checkout main
+git merge feature/my-feature
+
+Sync With Remote
+Pull latest changes:
+git pull
+
+Push branch:
+git push origin feature/my-feature
+
+Undo / Fix
+Unstage file:
+git reset <file>
+
+Discard all local changes
+git reset --hard
+
+Stash (Temporary Save)
+Save work:
+git stash
+
+Restore:
+git stash pop
+
+Rebase (Clean History)
+git checkout main
+git pull
+git checkout feature/my-feature
+git rebase main
+
+.gitignore
+node_modules
+dist
+.env
+.vite
+.DS_Store
+\*.log
