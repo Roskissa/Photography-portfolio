@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useLayoutEffect, useEffect, useMemo, useState } from "react";
 import "./Work.css";
 
 type CategoryId = "ilmakuvat" | "dem" | "ortokuvat" | "mallit3d";
@@ -115,6 +115,12 @@ function buildImageList(
 }
 
 export default function Work() {
+  useLayoutEffect(() => {
+    document.documentElement.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.body.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
+
   const allImages = useMemo(() => {
     return [
       ...buildImageList(ilmakuvatModules, "ilmakuvat"),
@@ -192,7 +198,17 @@ export default function Work() {
               tarkastettaviksi eri päivämäärien välillä.
             </p>
 
-            <button type="button" className="work-cta">
+            <button
+              type="button"
+              className="work-cta"
+              onClick={() => {
+                window.open(
+                  "https://niinhyvaadronea.duckdns.org/",
+                  "_blank",
+                  "noopener,noreferrer",
+                );
+              }}
+            >
               Tutustu työkaluun tästä
             </button>
           </div>
