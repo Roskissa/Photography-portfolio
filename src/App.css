@@ -57,18 +57,22 @@ img {
   overflow-x: hidden;
 }
 
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  z-index: 1000;
+
+  /* important so content doesn't show through */
+  background: rgba(10, 13, 18, 0.85);
+  backdrop-filter: blur(10px);
+}
+
 .container {
   width: min(100% - 32px, var(--container));
   margin: 0 auto;
-}
-
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  backdrop-filter: blur(14px);
-  background: rgba(22, 17, 15, 0.55);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .topbar-inner {
@@ -384,10 +388,15 @@ img {
   inset: -3%;
   background-size: cover;
   background-position: center;
+
   opacity: 0;
   transform: scale(1.06);
-  animation: heroFadeLoop 25s infinite ease-in-out;
-  filter: saturate(0.95) brightness(0.55);
+
+  animation-name: heroFadeLoop;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+
+  filter: saturate(0.95) brightness(0.5);
 }
 
 .hero-background-overlay {
@@ -461,18 +470,6 @@ img {
   border-radius: 14px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
   user-select: none;
-}
-
-.hero-floating-images img:nth-child(1) {
-  transform: translate(1000px, -350px) rotate(-4deg);
-}
-
-.hero-floating-images img:nth-child(2) {
-  transform: translate(600px, 50px) rotate(2deg);
-}
-
-.hero-floating-images img:nth-child(3) {
-  transform: translate(-100px, 450px) rotate(-2deg);
 }
 
 /* =========================

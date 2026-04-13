@@ -18,8 +18,11 @@ const pf_ilmakuvat: Pf_ilmakuva[] = Array.from({ length: 82 }, (_, i) => ({
   src: `/ilmakuvat/pf_ilmakuva_${i + 1}.webp`,
 }));
 
+const secondsPerImage = 5;
+
 function Main() {
-  const heroBackgroundImages = pf_valokuvat.slice(0, 5);
+  const heroBackgroundImages = pf_valokuvat.slice(0, 50);
+  const totalDuration = heroBackgroundImages.length * secondsPerImage;
 
   const [selectedImage, setSelectedImage] = useState<
     Pf_valokuva | Pf_ilmakuva | null
@@ -42,11 +45,14 @@ function Main() {
 
       <header className="topbar">
         <div className="container topbar-inner">
-          <div className="brand">IVAN SYNENKO</div>
+          <div className="brand">
+            <a href="#top">IVAN SYNENKO</a>
+          </div>
 
           <nav className="nav">
-            <a href="#portfolio-photo">Portfolio</a>
-            <a href="#services">Työ</a>
+            <a href="#portfolio-photo">Valokuvaus</a>
+            <a href="#portfolio-aerial">Ilmakuvaus</a>
+            <a href="#seuranta">Projektisuranta</a>
             <a href="#contact">Ota yhteyttä</a>
           </nav>
         </div>
@@ -66,6 +72,18 @@ function Main() {
           ))}
           <div className="hero-background-overlay" />
         </div>
+
+        {heroBackgroundImages.map((image, index) => (
+          <div
+            key={image.src}
+            className="hero-background-slide"
+            style={{
+              backgroundImage: `url(${image.src})`,
+              animationDelay: `${index * secondsPerImage}s`,
+              animationDuration: `${totalDuration}s`,
+            }}
+          />
+        ))}
 
         <div className="container hero-grid hero-grid-enhanced">
           <div className="hero-copy reveal-up">
@@ -184,11 +202,11 @@ function Main() {
         </div>
       </section>
 
-      <section id="services" className="section">
+      <section id="seuranta" className="section">
         <div className="container">
           <div className="section-heading reveal-up">
             <p className="eyebrow">Palvelut</p>
-            <h2>Työ</h2>
+            <h2>Seuranta</h2>
           </div>
 
           <div className="services-grid">
