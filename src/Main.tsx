@@ -10,18 +10,18 @@ type Pf_ilmakuva = {
   src: string;
 };
 
-const pf_valokuvat: Pf_valokuva[] = Array.from({ length: 17 }, (_, i) => ({
+const pf_valokuvat: Pf_valokuva[] = Array.from({ length: 149 }, (_, i) => ({
   src: `/valokuvat/pf_valokuva_${i + 1}.webp`,
 }));
 
-const pf_ilmakuvat: Pf_ilmakuva[] = Array.from({ length: 82 }, (_, i) => ({
+const pf_ilmakuvat: Pf_ilmakuva[] = Array.from({ length: 87 }, (_, i) => ({
   src: `/ilmakuvat/pf_ilmakuva_${i + 1}.webp`,
 }));
 
 const secondsPerImage = 5;
 
 function Main() {
-  const heroBackgroundImages = pf_valokuvat.slice(0, 50);
+  const heroBackgroundImages = pf_valokuvat.slice(0, 20);
   const totalDuration = heroBackgroundImages.length * secondsPerImage;
 
   const [selectedImage, setSelectedImage] = useState<
@@ -35,8 +35,41 @@ function Main() {
     setTimeout(() => {
       setSelectedImage(null);
       setIsClosing(false);
-    }, 500);
+    }, 100);
   }
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Sending failed");
+      }
+
+      alert("Viesti lähetetty!");
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (error) {
+      console.error(error);
+      alert("Viestin lähetys epäonnistui.");
+    }
+  };
 
   return (
     <main className="site-shell" id="top">
@@ -66,24 +99,13 @@ function Main() {
               className="hero-background-slide"
               style={{
                 backgroundImage: `url(${image.src})`,
-                animationDelay: `${index * 5}s`,
+                animationDelay: `${index * secondsPerImage}s`,
+                animationDuration: `${totalDuration}s`,
               }}
             />
           ))}
           <div className="hero-background-overlay" />
         </div>
-
-        {heroBackgroundImages.map((image, index) => (
-          <div
-            key={image.src}
-            className="hero-background-slide"
-            style={{
-              backgroundImage: `url(${image.src})`,
-              animationDelay: `${index * secondsPerImage}s`,
-              animationDuration: `${totalDuration}s`,
-            }}
-          />
-        ))}
 
         <div className="container hero-grid hero-grid-enhanced">
           <div className="hero-copy reveal-up">
@@ -92,24 +114,6 @@ function Main() {
             <p className="eyebrow">
               Valokuvaus · Ilmakuvaus · Projektiseuranta
             </p>
-          </div>
-
-          <div className="hero-floating-images">
-            <img
-              src="/images/Portfolio_1.webp"
-              alt=""
-              className="hero-float-img hero-float-img-1"
-            />
-            <img
-              src="/images/Portfolio_2.webp"
-              alt=""
-              className="hero-float-img hero-float-img-2"
-            />
-            <img
-              src="/images/Portfolio_3.webp"
-              alt=""
-              className="hero-float-img hero-float-img-3"
-            />
           </div>
         </div>
       </section>
@@ -208,7 +212,6 @@ function Main() {
             <p className="eyebrow">Portfolio</p>
             <h2>Projektiseuranta</h2>
             <h2 className="tracking-preview-subtitle"></h2>
-            <h2 className="tracking-preview-subtitle">Esimerkkikohde</h2>
           </div>
         </div>
 
@@ -282,28 +285,68 @@ function Main() {
         </div>
       </section>
 
-      <section id="contact" className="section">
+      <section className="contact-section" id="contact">
         <div className="container">
-          <div className="contact-panel reveal-up">
-            <div>
-              <p className="eyebrow">Kiinnostuitko?</p>
-              <h2>Ota yhteyttä</h2>
-              <p className="contact-text">
-                Vastaan kaikkina vuodenaikoina tiedusteluihin, tarjouspyyntöihin
-                ja yhteistyöehdotuksiin.
-              </p>
+          <div className="section-heading">
+            <p className="eyebrow">Kiinnostuitko?</p>
+            <h2>Ota yhteyttä</h2>
+            <p className="contact-intro">
+              Vastaan mielelläni heränneisiin kysymyksiin, tarjouspyyntöihin tai
+              yhteistyöehdotuksiin.
+            </p>
+          </div>
+
+          <form className="contact-form" onSubmit={handleSubmit}>
+            <div className="contact-layout">
+              <div className="contact-left">
+                <div className="contact-field">
+                  <label htmlFor="message">Viesti</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    placeholder="Kirjoita viesti..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="contact-right">
+                <div className="contact-field">
+                  <label htmlFor="name">Nimesi</label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="Kirjoita nimesi..."
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="contact-field">
+                  <label htmlFor="email">Sähköposti</label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="Kirjoita sähköpostisi..."
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="contact-actions">
-              <a className="button button-primary" href="mailto:your@email.com">
-                Lähetä sähköposti
-              </a>
-
-              <a className="button button-secondary" href="#top">
-                Takaisin ylös
-              </a>
+              <button type="submit" className="contact-send-button">
+                Lähetä
+              </button>
             </div>
-          </div>
+          </form>
         </div>
       </section>
     </main>
