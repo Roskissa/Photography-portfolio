@@ -138,6 +138,7 @@ export default function Work() {
   }, [allImages]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const currentDate = dates[currentIndex] ?? "";
 
   // Keeps page valid even if there are no images yet
@@ -164,19 +165,53 @@ export default function Work() {
       <div className="background-glow background-glow-1" />
       <div className="background-glow background-glow-2" />
 
-      {/* Same topbar structure as main page */}
       <header className="topbar">
         <div className="container topbar-inner">
-          <a href="/#top" className="brand work-brand-link">
+          <a
+            href="/#top"
+            className="brand work-brand-link"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
             IVAN SYNENKO
           </a>
 
-          <nav className="nav">
-            <a href="/#portfolio-about">Minusta</a>
-            <a href="/#portfolio-photo">Valokuvaus</a>
-            <a href="/#portfolio-aerial">Ilmakuvaus</a>
-            <a href="/#seuranta">Projektiseuranta</a>
-            <a href="/#contact">Ota yhteyttä</a>
+          <button
+            className={`menu-button ${isMobileMenuOpen ? "is-open" : ""}`}
+            type="button"
+            aria-label="Avaa valikko"
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen((current) => !current)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <nav className={`nav ${isMobileMenuOpen ? "nav-open" : ""}`}>
+            <a
+              href="/#portfolio-about"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Minusta
+            </a>
+            <a
+              href="/#portfolio-photo"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Valokuvaus
+            </a>
+            <a
+              href="/#portfolio-aerial"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Ilmakuvaus
+            </a>
+            <a href="/#seuranta" onClick={() => setIsMobileMenuOpen(false)}>
+              Projektiseuranta
+            </a>
+            <a href="/#contact" onClick={() => setIsMobileMenuOpen(false)}>
+              Ota yhteyttä
+            </a>
           </nav>
         </div>
       </header>

@@ -92,6 +92,7 @@ button {
 }
 
 .topbar-inner {
+  position: relative;
   min-height: var(--topbar-height);
   display: flex;
   align-items: center;
@@ -99,6 +100,8 @@ button {
 }
 
 .brand {
+  position: relative;
+  z-index: 1002;
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -119,6 +122,58 @@ button {
 
 .nav a:hover {
   color: var(--text);
+}
+
+.menu-button {
+  display: none;
+  position: relative;
+  z-index: 1002;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+}
+
+.menu-button span {
+  position: absolute;
+  left: 12px;
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--text);
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    top 0.2s ease;
+}
+
+.menu-button span:nth-child(1) {
+  top: 14px;
+}
+
+.menu-button span:nth-child(2) {
+  top: 21px;
+}
+
+.menu-button span:nth-child(3) {
+  top: 28px;
+}
+
+.menu-button.is-open span:nth-child(1) {
+  top: 21px;
+  transform: rotate(45deg);
+}
+
+.menu-button.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-button.is-open span:nth-child(3) {
+  top: 21px;
+  transform: rotate(-45deg);
 }
 
 /* =========================
@@ -813,8 +868,50 @@ button {
 }
 
 @media (max-width: 760px) {
+  .menu-button {
+    display: block;
+  }
+
   .nav {
-    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 12px;
+    right: 12px;
+
+    display: grid;
+    gap: 6px;
+
+    padding: 12px;
+    border-radius: 20px;
+    background: rgba(31, 24, 21, 0.96);
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(14px);
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .nav.nav-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .nav a {
+    display: block;
+    padding: 14px 14px;
+    border-radius: 14px;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .nav a:hover {
+    background: rgba(255, 255, 255, 0.08);
   }
 
   .hero-section {

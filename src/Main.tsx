@@ -28,6 +28,7 @@ function Main() {
     Pf_valokuva | Pf_ilmakuva | null
   >(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   function closeModal() {
     setIsClosing(true);
@@ -46,15 +47,48 @@ function Main() {
       <header className="topbar">
         <div className="container topbar-inner">
           <div className="brand">
-            <a href="#top">IVAN SYNENKO</a>
+            <a href="#top" onClick={() => setIsMobileMenuOpen(false)}>
+              IVAN SYNENKO
+            </a>
           </div>
 
-          <nav className="nav">
-            <a href="#portfolio-about">Minusta</a>
-            <a href="#portfolio-photo">Valokuvaus</a>
-            <a href="#portfolio-aerial">Ilmakuvaus</a>
-            <a href="#seuranta">Projektiseuranta</a>
-            <a href="#contact">Ota yhteyttä</a>
+          <button
+            className={`menu-button ${isMobileMenuOpen ? "is-open" : ""}`}
+            type="button"
+            aria-label="Avaa valikko"
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen((current) => !current)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <nav className={`nav ${isMobileMenuOpen ? "nav-open" : ""}`}>
+            <a
+              href="#portfolio-about"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Minusta
+            </a>
+            <a
+              href="#portfolio-photo"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Valokuvaus
+            </a>
+            <a
+              href="#portfolio-aerial"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Ilmakuvaus
+            </a>
+            <a href="#seuranta" onClick={() => setIsMobileMenuOpen(false)}>
+              Projektiseuranta
+            </a>
+            <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+              Ota yhteyttä
+            </a>
           </nav>
         </div>
       </header>
