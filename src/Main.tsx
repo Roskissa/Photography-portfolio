@@ -117,13 +117,13 @@ function Main() {
 
             <div className="about-photo-swap">
               <img
-                src="/valokuvat/pf_valokuva_26.webp"
+                src="/valokuvat/pf_ivan1.webp"
                 alt="Kuva minusta 1"
                 className="about-photo about-photo-a"
               />
 
               <img
-                src="/valokuvat/pf_valokuva_27.webp"
+                src="/valokuvat/pf_ivan2.webp"
                 alt="Kuva minusta 2"
                 className="about-photo about-photo-b"
               />
@@ -310,7 +310,6 @@ function Main() {
           </div>
         </div>
       </section>
-      <section></section>
     </main>
   );
 }

@@ -172,6 +172,7 @@ export default function Work() {
           </a>
 
           <nav className="nav">
+            <a href="/#portfolio-about">Minusta</a>
             <a href="/#portfolio-photo">Valokuvaus</a>
             <a href="/#portfolio-aerial">Ilmakuvaus</a>
             <a href="/#seuranta">Projektiseuranta</a>
@@ -324,6 +325,19 @@ export default function Work() {
                 </article>
               );
             })}
+          </div>
+        </div>
+      </section>
+      <section className="contact-section" id="contact">
+        <div className="container">
+          <div className="section-heading">
+            <p className="eyebrow">Kiinnostuitko?</p>
+            <h2>Ota yhteyttä</h2>
+            <p className="contact-intro">
+              Vastaan mielelläni heränneisiin kysymyksiin, tarjouspyyntöihin tai
+              yhteistyöehdotuksiin.
+            </p>
+            <p className="eyebrow">ivan.synenko@gmail.com</p>
           </div>
         </div>
       </section>
