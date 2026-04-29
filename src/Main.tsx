@@ -37,39 +37,6 @@ function Main() {
       setIsClosing(false);
     }, 100);
   }
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          message,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Sending failed");
-      }
-
-      alert("Viesti lähetetty!");
-      setName("");
-      setEmail("");
-      setMessage("");
-    } catch (error) {
-      console.error(error);
-      alert("Viestin lähetys epäonnistui.");
-    }
-  };
 
   return (
     <main className="site-shell" id="top">
@@ -83,6 +50,7 @@ function Main() {
           </div>
 
           <nav className="nav">
+            <a href="#portfolio-about">Minusta</a>
             <a href="#portfolio-photo">Valokuvaus</a>
             <a href="#portfolio-aerial">Ilmakuvaus</a>
             <a href="#seuranta">Projektiseuranta</a>
@@ -118,7 +86,51 @@ function Main() {
         </div>
       </section>
 
-      <section className="section section-intro" />
+      <section className="about-section" id="portfolio-about">
+        <div className="container">
+          <div className="section-heading reveal-up">
+            <h2>Minusta</h2>
+          </div>
+
+          <div className="about-container">
+            <div className="about-text">
+              <p>
+                Olen Uudellamaalla toimiva valokuvaaja. Olen kuvannut jo
+                nuoresta asti ja vuosien varrella se on muuttunut harrastuksesta
+                enemmän tekemiseksi.
+              </p>
+
+              <p>
+                Kuvaustilanteissa olen aika rento ja pyrin pysymään pois tieltä.
+                En ohjaa turhaan tai tee tilanteesta isoa numeroa, vaan annan
+                asioiden mennä omalla painollaan. Usein parhaat kuvat syntyvät
+                silloin, kun ihmiset tai paikat ovat sellaisia kuin ne oikeasti
+                ovat, eikä mitään tarvitse erikseen rakentaa.
+              </p>
+
+              <p>
+                Minun pääasiallinen tyyli on dokumentaarinen kuvaus erilaisissa
+                tapahtumissa ja menoissa. Näin kuvasarjasta muodostuu tarina,
+                josta jää mukava muisto koko tapahtumasta.
+              </p>
+            </div>
+
+            <div className="about-photo-swap">
+              <img
+                src="/valokuvat/pf_valokuva_26.webp"
+                alt="Kuva minusta 1"
+                className="about-photo about-photo-a"
+              />
+
+              <img
+                src="/valokuvat/pf_valokuva_27.webp"
+                alt="Kuva minusta 2"
+                className="about-photo about-photo-b"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section id="portfolio-photo" className="section portfolio-section">
         <div className="portfolio-heading-wrap">
@@ -294,61 +306,11 @@ function Main() {
               Vastaan mielelläni heränneisiin kysymyksiin, tarjouspyyntöihin tai
               yhteistyöehdotuksiin.
             </p>
+            <p className="eyebrow">ivan.synenko@gmail.com</p>
           </div>
-
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <div className="contact-layout">
-              <div className="contact-left">
-                <div className="contact-field">
-                  <label htmlFor="message">Viesti</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    placeholder="Kirjoita viesti..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="contact-right">
-                <div className="contact-field">
-                  <label htmlFor="name">Nimesi</label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Kirjoita nimesi..."
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="contact-field">
-                  <label htmlFor="email">Sähköposti</label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="Kirjoita sähköpostisi..."
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="contact-actions">
-              <button type="submit" className="contact-send-button">
-                Lähetä
-              </button>
-            </div>
-          </form>
         </div>
       </section>
+      <section></section>
     </main>
   );
 }
